@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+  <body>
+    <h1>Ramanujan!</h1>
+    <input id="bday" type="date">
+    <div> <span id="seconds"></span> seconds</div>
+    <div> <span id="minutes"></span> minutes</div>
+    <div> <span id="hours"></span> hours</div>
+    <div> <span id="days"></span> days</div>
+    <div> <span id="weeks"></span> weeks</div>
+    <div> <span id="months"></span> months</div>
+    <div> <span id="years"></span> years</div>
+    <div> <span id="foo"></span> next second power of ten</div>
+    <script>
+      const el = document.getElementById.bind(document);
+
+      function update() {
+
+        const bday = el("bday");
+        const bdayMillis = new Date(bday.value).getTime();
+        const nowMillis = new Date().getTime();
+
+        const ageMillis = (nowMillis - bdayMillis);
+        const seconds = Math.floor(ageMillis / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+        const weeks = Math.floor(days / 7);
+        const years = Math.floor(days / 365.24);
+        const months = Math.floor(12 * days / 365.24);
+
+        el("seconds").innerHTML = seconds.toLocaleString();
+        el("minutes").innerHTML = minutes.toLocaleString();
+        el("hours").innerHTML = hours.toLocaleString();
+        el("days").innerHTML = days.toLocaleString();
+        el("weeks").innerHTML = weeks.toLocaleString();
+        el("months").innerHTML = months.toLocaleString();
+        el("years").innerHTML = years.toLocaleString();
+
+        let nextSecondsPowerOfTen = nextPowerOfTen(seconds);
+        let delta = nextSecondsPowerOfTen - seconds;
+        let date = new Date(nowMillis + 1000 * delta);
+        el("foo").innerHTML = date.toLocaleDateString();
+
+      }
+
+      el("bday").addEventListener("change", update);
+
+      go();
+
+      function go() {
+        update();
+        window.requestAnimationFrame(go);
+      }
+
+      function isPrime(n) {
+        const limit = Math.ceil(Math.sqrt(n));
+        for (let i = 2; i <= limit; i++) {
+          if (n % i == 0) {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      function nextPowerOfTen(n) {
+        return 10 ** Math.ceil(Math.log10(n));
+      }
+
+    </script>
+  </body>
+</html>
