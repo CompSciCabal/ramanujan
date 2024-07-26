@@ -15,6 +15,20 @@ function pow10() {
   return obj
 }
 
+function pow2() {
+  let cur = 1
+  let obj = {
+    name: "Power of 2!",
+    get cur() {
+        return cur
+    },
+    next: function() {
+      return cur *= 2
+    }
+  }
+  return obj
+}
+
 function fac() {
   let index = 1
   let cur = 1
@@ -47,9 +61,29 @@ function fib() {
   return obj
 }
 
+function squares() {
+  let index = 1
+  let cur = 1
+  let obj = {
+    get name() {
+      return `Square of ${index}`
+    },
+    get cur() {
+        return cur
+    },
+    next: function() {
+      return cur = ++index**2
+    }
+  }
+  return obj
+}
+
+// listed in order of "interestingness"
 let streams = [ pow10
+              , pow2
               , fac
               , fib
+              , squares
               ]
 
 let seconds = {
@@ -115,6 +149,9 @@ for (let day = 0; day < limit; day++) {
     })
   })
 }
+
+console.log(out)
+
 
 
 
