@@ -1,12 +1,16 @@
 const limit = 120 * 365
 const out = []
 
+// some interesting numbers
+
 function pow10() {
   let cur = 1
   let obj = {
-    name: "Power of 10!",
+    get name() {
+      return `10 to the power of ${Math.log10(cur)}`
+    },
     get cur() {
-        return cur
+      return cur
     },
     next: function() {
       return cur *= 10
@@ -18,9 +22,11 @@ function pow10() {
 function pow2() {
   let cur = 1
   let obj = {
-    name: "Power of 2!",
+    get name() {
+      return `2 to the power of ${Math.log2(cur)}`
+    },
     get cur() {
-        return cur
+      return cur
     },
     next: function() {
       return cur *= 2
@@ -33,9 +39,11 @@ function fac() {
   let index = 1
   let cur = 1
   let obj = {
-    name: "Factorial",
+    get name() {
+      return `Factorial of ${index}`
+    },
     get cur() {
-        return cur
+      return cur
     },
     next: function() {
       return cur *= ++index
@@ -45,17 +53,38 @@ function fac() {
 }
 
 function fib() {
+  let index = 1
   let prev = 1
   let cur = 1
   let obj = {
-    name: "Fibonacci",
+    get name() {
+      return `Fibonacci of ${index}`
+    },
     get cur() {
-        return cur
+      return cur
     },
     next: function() {
+      index++
       cur = prev + cur
       prev = cur - prev
       return cur
+    }
+  }
+  return obj
+}
+
+function tri() {
+  let index = 1
+  let cur = 1
+  let obj = {
+    get name() {
+      return `Triangle number ${index}`
+    },
+    get cur() {
+      return cur
+    },
+    next: function() {
+      return cur += ++index
     }
   }
   return obj
@@ -69,7 +98,7 @@ function squares() {
       return `Square of ${index}`
     },
     get cur() {
-        return cur
+      return cur
     },
     next: function() {
       return cur = ++index**2
@@ -79,12 +108,16 @@ function squares() {
 }
 
 // listed in order of "interestingness"
+
 let streams = [ pow10
               , pow2
               , fac
               , fib
               , squares
+              , tri
               ]
+
+// TIMING!
 
 let seconds = {
   name:    "seconds",
@@ -143,7 +176,8 @@ for (let day = 0; day < limit; day++) {
       return
     f.streams.forEach(s => {
       while (f.start(day) <= s.cur && s.cur < f.end(day)) {
-        out.push({ day, name: `${s.name} ${f.name}`, value: s.cur })
+        // out.push({ day, name: `${s.name} ${f.name}`, value: s.cur })
+        out.push({ day, type: s.name, time: f.name, value: s.cur })
         s.next()
       }
     })
@@ -152,39 +186,39 @@ for (let day = 0; day < limit; day++) {
 
 console.log(out)
 
+let el = document.getElementById.bind(document)
+el('out').innerHTML = out
+
+let unique = xs => xs.reduce((acc, x, i) => xs.indexOf(x) === i ? acc.concat(x) : acc, [])
+let range = n => [...Array(n).keys()]
+let missing = (all, some) => all.filter(x => !some.includes(x))
+
+// slow!
+// let all_days = range(limit)
+// let good_days = unique(out.map(d => d.day))
+// let bad_days = missing(all_days, good_days)
+
+// fast!
+let all_days = new Set(range(limit))
+let good_days = new Set(out.map(d => d.day))
+let bad_days = [...all_days.difference(good_days)]
+
+console.log(bad_days)
 
 
+// TODO:
+// maybe pow10 in dog years, cat years, etc? I'm not sure how to do that...
+// can also examine other units of time, like time it takes light to get to the nearest stars,
+// years on other planets (I'm ten years old on Saturn today!, I'm 1000 Neptunian days old!),
+// etc <-- maybe these need a different loop, just for one factor...
 
-/*
-
-function isPrime(n) {
-  const limit = Math.ceil(Math.sqrt(n));
-  for (let i = 2; i <= limit; i++) {
-    if (n % i == 0) {
-      return false;
-    }
-  }
-  return true;
-}
-
-function nextPowerOfTen(n) {
-  return 10 ** Math.ceil(Math.log10(n));
-}
-
-// factorial
-// fibanacchi
-// triangle numbers
-// pizza numbers
-// primes
-
-
-const ageMillis = (nowMillis - bdayMillis);
-const seconds = Math.floor(ageMillis / 1000);
-const minutes = Math.floor(seconds / 60);
-const hours = Math.floor(minutes / 60);
-const days = Math.floor(hours / 24);
-const weeks = Math.floor(days / 7);
-const years = Math.floor(days / 365.24);
-const months = Math.floor(12 * days / 365.24);
-
-*/
+// OEIS sequences:
+// https://oeis.org/A000396 Perfect numbers
+// https://oeis.org/A000108 Catalan numbers
+// https://oeis.org/A000668 Mersenne primes
+// https://oeis.org/A000578 The cubes
+// https://oeis.org/A034897 Hyperperfect numbers
+// https://oeis.org/A019279 Superperfect numbers
+// https://oeis.org/A006862 Euclid numbers
+// https://oeis.org/A000244 pow 3
+//
