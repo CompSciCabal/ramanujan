@@ -4,7 +4,17 @@
     <h1>Ramanujan day picker!</h1>
 
     put birthday here!
-    <input type="datetime" id="bday" />
+    <input type="datetime-local" id="bday" />
+
+    <div>
+      Upcoming:
+      <input type="range" min="1" max="50" value="8" id="intlimit" />
+      <input type="range" min="1" max="3000" value="100" id="uplimit" />
+      <pre id="upcoming"></pre>
+    </div>
+
+    Today:
+    <pre id="today"></pre>
 
     <pre id="out"></pre>
 
